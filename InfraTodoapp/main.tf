@@ -1,7 +1,7 @@
 module "resource_G" {
   source      = "../Module/resource_group"
   rg_name     = "tanu_todo"
-  rg_location = "Central US"
+  rg_location = "east us"
 }
 
 module "virtual_network" {
@@ -10,7 +10,7 @@ module "virtual_network" {
   vnet_name           = "todo-net"
   resource_group_name = "tanu_todo"
   address_space       = ["10.0.0.0/16"]
-  vnet_location       = "Central US"
+  vnet_location       = "east us"
 }
 
 module "frontEnd_subnet" {
@@ -36,7 +36,7 @@ module "Public_IP" {
   source = "../Module/Public_IP"
   IP_name = "ip_todo"
   rg_name = "tanu_todo"
-  IP_location = "Central US"
+  IP_location = "east us"
   allocation_method = "Static"
 }
 module "Public_PIP" {
@@ -44,21 +44,21 @@ module "Public_PIP" {
   source = "../Module/Public_IP"
   IP_name = "pip_todo"
   rg_name = "tanu_todo"
-  IP_location = "Central US"
+  IP_location = "east us"
   allocation_method = "Static"
 }
 
 module "frontend_VM"{
-  depends_on = [module.frontEnd_subnet, module.virtual_network]
+  depends_on = [module.frontEnd_subnet, module.virtual_network, module.Public_IP]
   source = "../Module/V_M"
   nic_name = "tanu_nic"
-  nic_location = "Central US"
+  nic_location = "east us"
   resource_name = "tanu_todo"
   config_name = "internal"
   private_ip = "Dynamic"
   vm_name = "tanu-vm-front"
   rg_name = "tanu_todo"
-  vm_location = "Central US"
+  vm_location = "east us"
   vm_size = "Standard_B1s"
   admin_user = "Tanu_123"
   admin_password = "BeHonest2u@20"
@@ -74,16 +74,16 @@ module "frontend_VM"{
 }
 
 module "backend_VM"{
-  depends_on = [module.backEnd_subnet, module.virtual_network]
+  depends_on = [module.backEnd_subnet, module.virtual_network, module.Public_PIP]
   source = "../Module/V_M"
   nic_name = "tanu_nic_back"
-  nic_location = "Central US"
+  nic_location = "east us"
   resource_name = "tanu_todo"
   config_name = "internal"
    private_ip = "Dynamic"
   vm_name = "tanu-vm-back"
   rg_name = "tanu_todo"
-  vm_location = "Central US"
+  vm_location = "east us"
   vm_size = "Standard_B1s"
   admin_user = "Tanu_1234"
   admin_password = "BeHonest2u@05"
@@ -105,7 +105,7 @@ module "sql_server"{
   sql_name = "todosqltanu"
   rg_name = "tanu_todo"
   sql_version = "12.0"
-  rg_location = "Central US"
+  rg_location = "east us"
   administrator_login = "Tanu_12345"
   administrator_password = "BeHonest2u@07"
 }
@@ -122,6 +122,6 @@ module "key_vault" {
   depends_on = [module.resource_G]
   kv_name = "tanu-key"
   source = "../Module/key_vault"
-  kv_location = "Central US"
+  kv_location = "east us"
   rg_name = "tanu_todo"
 }
