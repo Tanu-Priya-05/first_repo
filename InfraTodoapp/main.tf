@@ -120,7 +120,7 @@ module "sql_Database" {
 
 module "key_vault" {
   depends_on = [module.resource_G]
-  kv_name = "tanu-key"
+  kv_name = "tanu-keyyyy"
   source = "../Module/key_vault"
   kv_location = "east us"
   rg_name = "tanu_todo"
